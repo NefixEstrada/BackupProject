@@ -1,17 +1,19 @@
+# OS stuff
 .DS_Store
+
+# NodeJS stuff
 node_modules
-
-# local env files
-.env.local
-.env.*.local
-venv
-
-# Log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.env.local
+.env.*.local
 
-# Editor directories and files
+# Python stuff
+venv
+__pycache__
+
+# Editors stuff
 .idea
 .vscode
 *.suo
