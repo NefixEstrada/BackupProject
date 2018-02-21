@@ -28,7 +28,7 @@ class Backup(Resource):
     # POST
     def post(self, backup_id):
         """
-        Creates a new archive based on the paths specified in the settings.json file
+        Creates a new archive based on the paths specified in the backups.json file
         """
         pass
 
