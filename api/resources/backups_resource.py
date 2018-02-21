@@ -27,6 +27,7 @@ class Backups(Resource):
     # TODO: - Check if there's already an existing backup with that name
     # TODO: - Encryption stuff
     # TODO: - Folders to make the backup
+    # TODO: - Deleting method just deletes one backup
     def post(self):
         """
         Create a new backup repository
@@ -58,8 +59,6 @@ class Backups(Resource):
         Deletes all the backups
         """
         backups = read_backups()
-        print(backups)
-        print(len(backups))
 
         for backup in backups:
             execute_command(f"rm -rf {backup['path']}")
