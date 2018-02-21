@@ -4,7 +4,7 @@
 # Imports
 import json
 from flask_restful import Resource, reqparse
-from api.methods.files_methods import read_backups
+from api.methods.backups_methods import get_backup_path
 from api.methods.commands_methods import get_output
 
 
@@ -16,11 +16,7 @@ class Backup(Resource):
         """
         Gets a list of all the archives of a specific backup
         """
-        backups = read_backups()
-        for backup in backups:
-            if backup["id"] == backup_id:
-                backup_path = backup["path"]
-
+        backup_path = get_backup_path(backup_id)
         archives = json.loads(get_output(f"borg list --json {backup_path}"))["archives"]
 
         return {"archives": archives}, 200
