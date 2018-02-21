@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Imports
+import unicodedata
+import string as string_library
 
 # Normalize string
 # TODO: - Better normalizer
 def normalize_string(string):
-    return string.lower().replace(" ", "_")
+    # Remove accents and non UTF-8 strings
+    string = ''.join(letter for letter in unicodedata.normalize("NFKD", string) if letter in string_library.ascii_letters or letter == " ")
+    characters_to_avoid = "|/&;:{}\$%#@= "
+    for character in characters_to_avoid.split():
+        string = string.replace(character, "_")
+    return string.lower()
 
 
 # Normalize parser
