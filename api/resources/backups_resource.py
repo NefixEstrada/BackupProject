@@ -15,6 +15,9 @@ class Backups(Resource):
 
     # GET
     def get(self):
+        """
+        List all the backups stored in settings.json
+        """
         backups = read_backups()
 
         return backups, 200
@@ -25,6 +28,9 @@ class Backups(Resource):
     # TODO: - Encryption stuff
     # TODO: - Folders to make the backup
     def post(self):
+        """
+        Create a new backup repository
+        """
         parser = reqparse.RequestParser()
         parser.add_argument("name", type=str, required=True, help="This is the name that is going to be displayed")
         args = normalize_parser(parser.parse_args())
@@ -48,6 +54,9 @@ class Backups(Resource):
 
     # DELETE
     def delete(self):
+        """
+        Deletes all the backups
+        """
         backups = read_backups()
         print(backups)
         print(len(backups))
