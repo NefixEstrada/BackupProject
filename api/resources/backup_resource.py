@@ -5,9 +5,10 @@
 import json
 from time import gmtime, strftime
 from flask_restful import Resource, reqparse
-from api.methods.backups_methods import get_backup_path, get_backup_directories
+from api.methods.backups_methods import get_backup
 from api.methods.commands_methods import get_output, execute_command
 from api.methods.normalization_methods import normalize_parser
+from api.methods.files_methods import read_backups, write_backups
 
 
 # Backup resource
@@ -18,7 +19,7 @@ class Backup(Resource):
         """
         Gets a list of all the archives of a specific backup
         """
-        backup_path = get_backup_path(backup_id)
+        backup_path = get_backup(backup_id)["path"]
         archives = json.loads(get_output(f"borg list --json {backup_path}"))["archives"]
 
         return {"archives": archives}, 200
@@ -37,15 +38,39 @@ class Backup(Resource):
 
         if not args["name"]:
             name = strftime("%Y-%m-%d_%H:%M:%S", gmtime())
-        backup_path = get_backup_path(backup_id)
-        backup_directories = " ".join(get_backup_directories(backup_id))
+        backup_path = get_backup(backup_id)["path"]
+        backup_directories = " ".join(get_backup(backup_id)["directories"])
 
         execute_command(f"borg create {backup_path}::{name} {backup_directories}")
+
         return {"message": "Successfully created the backup. Please allow some time to let the backup finish"}, 200
 
     # PUT
+    # TODO: Check if the directories are valid
+    # TODO: Check if there were parameters passed (204)
+    # TODO: Change the name of the folder where the repo is located
+    # TODO: Normalize paths
     def put(self, backup_id):
         """
         Edits the backup name or / and the paths to create the backup
         """
-        pass
+        parser = reqparse.RequestParser()
+        parser.add_argument("name", type=str, help="The new name that the backup is going to have")
+        parser.add_argument("directories", type=str, help="A json array of the directories that are going to be backuped")
+        args = parser.parse_args()
+
+        new_backup = get_backup(backup_id)
+        if args["name"]:
+            new_backup["name"] = args["name"]
+        elif args["directories"]:
+            new_backup["directories"] = [directory for directory in args["directories"].replace(" ", "").split(",")]
+
+        backups = read_backups()
+        for backup in backups:
+            if backup["id"] == backup_id:
+                for key in new_backup:
+                    backup[key] = new_backup[key]
+
+        write_backups(backups)
+
+        return get_backup(backup_id), 200
