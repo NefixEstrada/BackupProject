@@ -43,7 +43,7 @@ class Backup(Resource):
 
         execute_command(f"borg create {backup_path}::{name} {backup_directories}")
 
-        return {"message": "Successfully created the backup. Please allow some time to let the backup finish"}, 200
+        return {"message": "Successfully created the backup. Please allow some time to let the backup finish"}, 201
 
     # PUT
     # TODO: Check if the directories are valid
