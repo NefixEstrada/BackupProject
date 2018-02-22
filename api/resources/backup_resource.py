@@ -41,7 +41,7 @@ class Backup(Resource):
         backup_directories = " ".join(get_backup_directories(backup_id))
 
         execute_command(f"borg create {backup_path}::{name} {backup_directories}")
-        return None, 200
+        return {"message": "Successfully created the backup. Please allow some time to let the backup finish"}, 200
 
     # PUT
     def put(self, backup_id):
