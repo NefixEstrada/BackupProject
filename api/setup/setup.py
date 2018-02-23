@@ -36,8 +36,12 @@ def check_python_and_pip():
 
 # Install dependencies
 def install_dependencies():
-    command = f"sudo pip{sys.version_info[0]}.{sys.version_info[1]} -U -r requirements.txt"
-    subprocess.run(command.split(" "))
+    create_venv_command = f"python{sys.version_info[0]}.{sys.version_info[1]} -m venv venv"
+    activate_venv_command = "source venv/bin/activate"
+    install_dependencies_command = "pip -U -r requirements.txt"
+    subprocess.run(create_venv_command.split(" "))
+    subprocess.run(activate_venv_command.split(" "))
+    subprocess.run(install_dependencies_command.split(" "))
 
 
 # Create the files
