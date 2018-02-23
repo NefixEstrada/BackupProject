@@ -45,11 +45,11 @@ def install_dependencies():
 def generate_files():
     with open("backups.json", "w+") as file:
         to_write = {"backups": []}
-        json.dump(to_write, file)
+        json.dump(to_write, file, indent=4)
     response = input("Please, specify the path where the backups are going to be located: ")
     with open("settings.json", "w+") as file:
         to_write = {"settings": {"backups_path": response}}
-        json.dump(to_write, file)
+        json.dump(to_write, file, indent=4)
 
 
 # Run the functions
