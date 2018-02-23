@@ -8,7 +8,6 @@ import string as string_library
 
 # Normalize string
 def normalize_string(string):
-    print(string)
     # Remove accents and non UTF-8 strings
     string = "".join(letter for letter in unicodedata.normalize("NFKD", string) if letter in string_library.ascii_letters or letter == " ")
     string = string.replace(" ", "_")
@@ -27,12 +26,12 @@ def normalize_string(string):
     elif new_string[-1] == "_":
         new_string = new_string[:-1]
 
-    return new_string
+    return new_string.lower()
 
 
 # Normalize parser
 def normalize_parser(parser_args):
-    return {arg_name: normalize_string(arg_value) for arg_name, arg_value in parser_args.items()}
+    return {arg_name: normalize_string(arg_value) for arg_name, arg_value in parser_args.items() if arg_value is not None}
 
 
 # Beautify string
