@@ -10,7 +10,7 @@ import json
 
 # Check Python version and if pip is installed
 def check_python_and_pip():
-    if not sys.version_info <= (3, 6):
+    if not sys.version_info >= (3, 6):
         print("Python 3.6 or newer is required to use Backup Project. Please, install it.")
         sys.exit(1)
 
