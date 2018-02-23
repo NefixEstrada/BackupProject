@@ -6,8 +6,6 @@ import sys
 from urllib import request
 import subprocess
 import json
-from api.install_dependencies import install_dependencies
-
 
 # Check Python version and if pip is installed
 def check_python_and_pip():
@@ -36,10 +34,11 @@ def check_python_and_pip():
 
 
 # Install dependencies
-def create_venv():
+def install_dependencies():
     create_venv_command = f"python{sys.version_info[0]}.{sys.version_info[1]} -m venv venv"
+    install_dependencies_command = "./venv/bin/pip install -r requirements.txt"
     subprocess.run(create_venv_command.split(" "))
-    install_dependencies()
+    subprocess.run(install_dependencies_command.split(" "))
 
 
 # Create the files
