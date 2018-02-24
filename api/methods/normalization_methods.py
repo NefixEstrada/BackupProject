@@ -30,10 +30,10 @@ def normalize_string(string):
 
 
 # Normalize parser
-def normalize_parser(parser_args):
+def normalize_parser(parser_args, ignore=[]):
     normalized_parser = {}
     for arg_name, arg_value in parser_args.items():
-        if arg_value != "":
+        if arg_value != "" or arg_name not in ignore:
             normalized_parser[arg_name] = normalize_string(arg_value)
         else:
             normalized_parser[arg_name] = arg_value
