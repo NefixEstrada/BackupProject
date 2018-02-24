@@ -31,7 +31,13 @@ def normalize_string(string):
 
 # Normalize parser
 def normalize_parser(parser_args):
-    return {arg_name: normalize_string(arg_value) for arg_name, arg_value in parser_args.items() if arg_value is not None}
+    normalized_parser = {}
+    for arg_name, arg_value in parser_args.items():
+        if arg_value != "":
+            normalized_parser[arg_name] = normalize_string(arg_value)
+        else:
+            normalized_parser[arg_name] = arg_value
+    return normalized_parser
 
 
 # Beautify string
