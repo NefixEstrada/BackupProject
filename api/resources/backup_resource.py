@@ -74,3 +74,19 @@ class Backup(Resource):
         write_backups(backups)
 
         return get_backup(backup_id), 200
+
+    # DELETE
+    # TODO: Check if the directory is correct
+    def delete(self, backup_id):
+        """
+        Deletes a specific backup based on the id passed
+        """
+        backups = read_backups()
+        for backup in backups:
+            if backup["id"] == backup_id:
+                execute_command(f"rm -rf {backup['path']}")
+                backups.remove(backup)
+
+        write_backups(backups)
+
+        return {"message": "Successfully deleted the backup!"}, 200
