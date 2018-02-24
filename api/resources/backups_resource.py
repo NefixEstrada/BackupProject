@@ -35,7 +35,7 @@ class Backups(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument("name", type=str, required=True, help="This is the name that is going to be displayed")
         parser.add_argument("directories", type=str, required=True, help="This are the directories that the backup is going to have")
-        args = normalize_parser(parser.parse_args())
+        args = normalize_parser(parser.parse_args(), ignore=["directories"])
 
         backups_path = read_settings("backups_path")
         backup_path = os.path.join(backups_path, args["name"])
