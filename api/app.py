@@ -8,6 +8,7 @@ from flask_restful import Api
 
 # Methods imports
 from api.methods.add_endpoints import add_endpoints
+from api.methods.files_methods import read_settings
 
 # App initialization
 app = Flask(__name__)
@@ -19,4 +20,4 @@ api = Api(app)
 add_endpoints(api)
 
 # Run the app
-app.run(port=5000, debug=True, host="192.168.5.24")
+app.run(port=5000, debug=True, host=read_settings("ip_host"))
