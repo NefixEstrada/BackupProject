@@ -8,6 +8,7 @@ from flask_restful import Resource, reqparse
 from api.methods.commands_methods import execute_command, get_output
 from api.methods.files_methods import read_settings, read_backups, write_backups
 from api.methods.normalization_methods import normalize_string
+from api.methods.directories_methods import check_directory, check_directories_array
 
 
 # Backups resource
@@ -38,7 +39,17 @@ class Backups(Resource):
         args = parser.parse_args()
 
         backups_path = read_settings("backups_path")
-        backup_path = os.path.join(backups_path, normalize_string(args["name"]))
+        repo_directory_name = normalize_string(args["name"])
+        backup_path = os.path.join(backups_path, repo_directory_name)
+        directories_to_backup = [directory for directory in args["directories"].split(", ")]
+        bad_directories = check_directories_array(directories_to_backup)
+
+        if (not check_directory(backups_path)) or (check_directory(backup_path)):
+            return {"message": "Sorry, either the backup already exists or the user doesn't have permissions to read / write in the backups directory specified in the settings"}, 409
+
+        elif len(bad_directories) != 0:
+            return {"message": f"Sorry, the directories {bad_directories} weren't found or the user doesn't have permissions to read them"}, 404
+
         execute_command(f"borg init -e none {backup_path}")
         backup_info = json.loads(get_output(f"borg info --json {backup_path}"))
 
@@ -46,7 +57,7 @@ class Backups(Resource):
             "id": backup_info["repository"]["id"],
             "path": backup_info["repository"]["location"],
             "name": args["name"],
-            "directories": [directory for directory in args["directories"].split(", ")]
+            "directories": directories_to_backup
         }
 
         backups = read_backups()

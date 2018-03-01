@@ -21,8 +21,7 @@ def check_directories_array(directories):
         if not check_directory(directory):
             bad_directories.append(directory)
 
-    if len(bad_directories) == 0:
-        return True, []
-
-    else:
+    if len(bad_directories) != 0:
         return False, bad_directories
+
+    return []
