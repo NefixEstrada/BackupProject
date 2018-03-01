@@ -7,7 +7,7 @@ import json
 from flask_restful import Resource, reqparse
 from api.methods.commands_methods import execute_command, get_output
 from api.methods.files_methods import read_settings, read_backups, write_backups
-from api.methods.normalization_methods import normalize_parser, beautify_string
+from api.methods.normalization_methods import normalize_string
 
 
 # Backups resource
@@ -35,17 +35,17 @@ class Backups(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument("name", type=str, required=True, help="This is the name that is going to be displayed")
         parser.add_argument("directories", type=str, required=True, help="This are the directories that the backup is going to have")
-        args = normalize_parser(parser.parse_args(), ignore=["directories"])
+        args = parser.parse_args()
 
         backups_path = read_settings("backups_path")
-        backup_path = os.path.join(backups_path, args["name"])
+        backup_path = os.path.join(backups_path, normalize_string(args["name"]))
         execute_command(f"borg init -e none {backup_path}")
         backup_info = json.loads(get_output(f"borg info --json {backup_path}"))
 
         new_backup = {
             "id": backup_info["repository"]["id"],
             "path": backup_info["repository"]["location"],
-            "name": beautify_string(args["name"]),
+            "name": args["name"],
             "directories": [directory for directory in args["directories"].split(", ")]
         }
 
