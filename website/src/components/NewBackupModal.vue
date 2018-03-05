@@ -37,6 +37,12 @@ export default {
         name: this.newBackupName,
         directories: this.newBackupDirectories
       }).then((res) => {
+        this.$parent.$refs.apiMessage.setContent(res)
+        this.$refs.newBackupModal.hide()
+        this.cleanForm()
+        this.$parent.getBackups()
+      }).catch((err) => {
+        this.$parent.$refs.apiMessage.setContent(err.response)
         this.$refs.newBackupModal.hide()
         this.cleanForm()
         this.$parent.getBackups()
