@@ -72,12 +72,9 @@ class Backups(Resource):
         Deletes all the backups
         """
         backups = read_backups()
-
         for backup in backups:
             execute_command(f"rm -rf {backup['path']}")
-            backups.remove(backup)
-            print(backup)
 
-        write_backups(backups)
+        write_backups([])
 
         return {"message": "Successfully deleted all the backups!"}, 200
