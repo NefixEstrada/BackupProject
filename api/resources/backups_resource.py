@@ -48,7 +48,7 @@ class Backups(Resource):
             return {"message": "Sorry, either the backup already exists or the user doesn't have permissions to read / write in the backups directory specified in the settings"}, 409
 
         elif len(bad_directories) != 0:
-            return {"message": f"Sorry, the directories {bad_directories} weren't found or the user doesn't have permissions to read them"}, 404
+            return {"message": f"Sorry, the directories '{', '.join([directory for directory in bad_directories][1])}' weren't found or the user doesn't have permissions to read them"}, 404
 
         execute_command(f"borg init -e none {backup_path}")
         backup_info = json.loads(get_output(f"borg info --json {backup_path}"))
