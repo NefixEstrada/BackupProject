@@ -5,10 +5,10 @@
 import json
 from time import gmtime, strftime
 from flask_restful import Resource, reqparse
-from api.methods.backups_methods import get_backup
-from api.methods.commands_methods import get_output, execute_command
-from api.methods.normalization_methods import normalize_parser
+from api.methods.backups_methods import get_backup, get_archives
+from api.methods.commands_methods import execute_command
 from api.methods.files_methods import read_backups, write_backups
+from api.methods.normalization_methods import normalize_string
 
 
 # Backup resource
@@ -19,8 +19,7 @@ class Backup(Resource):
         """
         Gets a list of all the archives of a specific backup
         """
-        backup_path = get_backup(backup_id)["path"]
-        archives = json.loads(get_output(f"borg list --json {backup_path}"))["archives"]
+        archives = get_archives(backup_id)
 
         return {"archives": archives}, 200
 
@@ -36,12 +35,21 @@ class Backup(Resource):
         parser.add_argument("name", type=str, help="This is the name that the archive is going to have (not recommended)")
         args = parser.parse_args()
 
+        archives = get_archives(backup_id)
+
         if not args["name"]:
-            name = strftime("%Y-%m-%d_%H:%M:%S", gmtime())
+            args["name"] = strftime("%Y-%m-%d_%H:%M:%S", gmtime())
+
+        else:
+            args["name"] = normalize_string(args["name"])
+
+            if any(archive["name"] == args["name"] for archive in archives):
+                return {"message": "Sorry, there's already an archive with that name. Please, use another name instead"}, 409
+
         backup_path = get_backup(backup_id)["path"]
         backup_directories = " ".join(get_backup(backup_id)["directories"])
 
-        execute_command(f"borg create {backup_path}::{name} {backup_directories}")
+        execute_command(f"borg create {backup_path}::{args['name']} {backup_directories}")
 
         return {"message": "Successfully created the backup. Please allow some time to let the backup finish"}, 201
 
