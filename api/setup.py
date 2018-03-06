@@ -49,7 +49,7 @@ def generate_files():
         to_write = {"backups": []}
         json.dump(to_write, file, indent=4)
     response = input("Please, specify the path where the backups are going to be located: ")
-    with open("settings.json", "w+") as file:
+    with open("../settings.json", "w+") as file:
         to_write = {"settings": {"backups_path": response, "ip_host": "0.0.0.0"}}
         json.dump(to_write, file, indent=4)
 
