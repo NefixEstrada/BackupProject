@@ -73,7 +73,7 @@ class Backups(Resource):
         """
         backups = read_backups()
         for backup in backups:
-            execute_command(f"rm -rf {backup['path']}")
+            execute_command(f"borg delete --force {backup['path']}")
 
         write_backups([])
 
