@@ -19,9 +19,10 @@ class Backup(Resource):
         """
         Gets a list of all the archives of a specific backup
         """
-        archives = get_archives(backup_id)
+        backup = get_backup(backup_id)
+        backup["archives"] = get_archives(backup_id)
 
-        return {"archives": archives}, 200
+        return {"backup": backup}, 200
 
     # POST
     # TODO: Normalize parser

@@ -1,7 +1,8 @@
 <template>
   <!-- TODO: Use bootstrap, make things prettier, use VueGoodTables... -->
   <div id="backup">
-    <h1>{{ backupName }}</h1>
+    <h1 v-if="loading === true">Loading...</h1>
+    <h1 v-else>{{ backup.name }}</h1>
 
     <api-message-alert ref="apiMessage"></api-message-alert>
     <p v-if="loading === true">Loading...</p>
@@ -47,7 +48,6 @@ export default {
   data () {
     return {
       loading: true,
-      backupName: '',
       columns: [
         {
           label: 'Name',
@@ -70,7 +70,8 @@ export default {
   methods: {
     getBackup: function () {
       myApi.get(`backup/${this.$route.params.backupId}`).then((res) => {
-        this.rows = res.data.archives
+        this.backup = res.data.backup
+        this.rows = this.backup.archives
         this.loading = false
       })
     },
