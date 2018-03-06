@@ -4,6 +4,7 @@
 
     <api-message-alert ref="apiMessage"></api-message-alert>
     <p v-if="loading === true">Loading...</p>
+    
     <vue-good-table
       v-else-if="rows.length !== 0"
       :globalSearch="true"
@@ -11,23 +12,25 @@
       :rows="rows"
       class="data-table">
 
-        <template slot="table-row-after" slot-scope="props">
-          <td>
-            <div v-for="directory in props.row.directories" :key="directory">
-              <b-badge>{{ directory }}</b-badge>
-            </div>
-          </td>
-          <td>
-            <b-row align-h="center">
-              <b-button-group>
-                <b-button variant="success" :to="'/backup/' + props.row.id">View</b-button>
-                <b-button variant="danger" @click="deleteBackup(props.row.id)">Delete</b-button>
-              </b-button-group>
-            </b-row>
-          </td>
-        </template>
-      </vue-good-table>
+      <template slot="table-row-after" slot-scope="props">
+        <td>
+          <div v-for="directory in props.row.directories" :key="directory">
+            <b-badge>{{ directory }}</b-badge>
+          </div>
+        </td>
+        <td>
+          <b-row align-h="center">
+            <b-button-group>
+              <b-button variant="success" :to="'/backup/' + props.row.id">View</b-button>
+              <b-button variant="danger" @click="deleteBackup(props.row.id)">Delete</b-button>
+            </b-button-group>
+          </b-row>
+        </td>
+      </template>
+    </vue-good-table>
+
     <p v-else>No backups yet!</p>
+
     <b-button v-b-modal.newBackupModal variant="primary">Create Backup</b-button>
     <new-backup-modal></new-backup-modal>
   </div>
