@@ -17,7 +17,7 @@ class Backup(Resource):
     # GET
     def get(self, backup_id):
         """
-        Gets a list of all the archives of a specific backup
+        Gets the information of a specific backup and a list of all its archives
         """
         backup = get_backup(backup_id)
         backup["archives"] = get_archives(backup_id)
