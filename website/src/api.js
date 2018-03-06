@@ -1,6 +1,8 @@
 import axios from 'axios'
+import settings from '../../settings.json'
+
 export const myApi = axios.create({
-  baseURL: 'http://192.168.5.24:5000/api',
+  baseURL: `http://${settings.settings.ip_host}:5000/api`,
   timeout: 10000,
   // withCredentials: true,
   transformRequest: [(data) => JSON.stringify(data)],
