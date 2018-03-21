@@ -43,3 +43,52 @@ def normalize_parser(parser_args, ignore=[]):
 # Beautify string
 def beautify_string(string):
     return string.replace("_", " ").title()
+
+
+# Make tree from a JSON string
+#
+# Huge thanks to apianti, without him, I'd still be stuck with this function (in fact, he made it entirely)
+#
+# Make tree from a JSON string
+def make_tree(content):
+    def get_children(parent_content, item, splitted_path):
+        if len(splitted_path) == 0:
+            parent_content.update(item)
+            return
+        child_name = splitted_path.pop(0)
+        child_content = {}
+        for child in parent_content["child"]:
+            if child["name"] == child_name:
+                child_content = child
+                break
+
+        if "name" not in child_content:
+            child_content["name"] = child_name
+            child_content["path"] = parent_content["path"] + "/" + child_name
+            child_content["type"] = "d"
+            child_content["child"] = []
+            parent_content["child"].append(child_content)
+
+        get_children(child_content, item, splitted_path)
+
+    # Transform the output of the command into a tree
+    tree_content = []
+    for item in content:
+        splitted_path = item["path"].split("/")
+        parent_name = splitted_path.pop(0)
+        parent_content = {}
+        for parent in tree_content:
+            if parent["name"] == parent_name:
+                parent_content = parent
+                break
+
+        if "name" not in parent_content:
+            parent_content["name"] = parent_name
+            parent_content["path"] = parent_name
+            parent_content["type"] = "d"
+            parent_content["child"] = []
+            tree_content.append(parent_content)
+
+        get_children(parent_content, item, splitted_path)
+
+    return tree_content

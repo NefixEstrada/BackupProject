@@ -4,7 +4,7 @@
 
     <api-message-alert ref="apiMessage"></api-message-alert>
     <p v-if="loading === true">Loading...</p>
-    
+
     <vue-good-table
       v-else-if="rows.length !== 0"
       :globalSearch="true"

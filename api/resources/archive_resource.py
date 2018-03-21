@@ -6,7 +6,7 @@ import json
 from flask_restful import Resource, reqparse
 from api.methods.backups_methods import get_backup, get_archives
 from api.methods.commands_methods import get_output, execute_command
-from api.methods.normalization_methods import normalize_string
+from api.methods.normalization_methods import normalize_string, make_tree
 
 # Archive resource
 class Archive(Resource):
@@ -17,10 +17,11 @@ class Archive(Resource):
         Get all the files of an archive
         """
         backup = get_backup(backup_id)
-        content = get_output(f"borg list --json-lines {backup['path']}::{archive_name}").split('\n')
-        del content[-1]
+        content = get_output(f"borg list --json-lines {backup['path']}::{archive_name}").split('\n')[:-2]
+        content = [json.loads(item) for item in content]
 
-        return {"content": [json.loads(item) for item in content]}, 200
+        tree_content = make_tree(content)
+        return {"content": tree_content}, 200
 
     def put(self, backup_id, archive_name):
         """

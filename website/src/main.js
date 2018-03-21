@@ -8,6 +8,12 @@ import './registerServiceWorker'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+import FontAwesome from '@fortawesome/fontawesome'
+import solidIcons from '@fortawesome/fontawesome-free-solid'
+import regularIcons from '@fortawesome/fontawesome-free-regular'
+
+FontAwesome.library.add(solidIcons, regularIcons)
+
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(VueGoodTable)
