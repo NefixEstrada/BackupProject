@@ -7,7 +7,7 @@ import json
 
 # Read the settings
 def read_settings(key):
-    with open("../settings.json") as file:
+    with open("settings.json") as file:
         json_file = json.load(file)["settings"]
 
     if key:
