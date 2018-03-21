@@ -18,7 +18,7 @@ def read_settings(key):
 
 # Read the backups
 def read_backups():
-    with open("backups.json") as file:
+    with open("api/backups.json") as file:
         json_file = json.load(file)
 
     return json_file["backups"]
@@ -26,6 +26,6 @@ def read_backups():
 
 # Write to the backups
 def write_backups(content):
-    with open("backups.json", "w") as file:
+    with open("api/backups.json", "w") as file:
         to_write = {"backups": content}
         json.dump(to_write, file, indent=4)
