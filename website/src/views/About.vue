@@ -21,6 +21,7 @@
       <li><a href="https://bootstrap-vue.js.org/">Bootstrap + Vue</a></li>
       <li><a href="https://jquery.com/">JQuery</a></li>
       <li><a href="https://github.com/xaksis/vue-good-table">Vue Good Tables</a></li>
+      <li><a href="https://github.com/FortAwesome/vue-fontawesome">Vue Font Awesome</a></li>
     </ul>
 
     <br>
@@ -36,6 +37,7 @@
     <br>
 
     <p>Made by <a href="https://github.com/NefixEstrada">Néfix Estrada</a></p>
+    <p>Huge, huge thanks to <a href="https://sourceforge.net/u/apianti">apianti</a>, he helped me a lot with some hard functions!</p>
   </div>
 </template>
 

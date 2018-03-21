@@ -1,17 +1,19 @@
 <template>
   <div id="archive">
-    <p v-for="item in content" :key="item">{{ item.path }}</p>
+     <file-explorer :content="content"></file-explorer>
   </div>
 </template>
 
 <script>
 import { myApi } from '../api.js'
+import fileExplorer from '../components/FileExplorer.vue'
 
 export default {
   name: 'archive',
+  components: { fileExplorer },
   data () {
     return {
-      content: []
+      content: {}
     }
   },
   created: function () {
@@ -19,8 +21,8 @@ export default {
   },
   methods: {
     getArchive: function () {
-      myApi.get(`backup/${this.$route.params.backupId}/${this.$route.params.archiveName}`).then((res) => {        
-        this.content = res.data.content
+      myApi.get(`backup/${this.$route.params.backupId}/${this.$route.params.archiveName}`).then((res) => {
+        this.content = { 'path': '/', 'type': 'd', 'child': res.data.content }
       })
     }
   }
