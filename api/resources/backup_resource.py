@@ -71,7 +71,7 @@ class Backup(Resource):
         new_backup = get_backup(backup_id)
         if args["name"]:
             new_backup["name"] = args["name"]
-        elif args["directories"]:
+        if args["directories"]:
             new_backup["directories"] = [directory for directory in args["directories"].replace(" ", "").split(",")]
 
         backups = read_backups()
@@ -90,11 +90,10 @@ class Backup(Resource):
         """
         Deletes a specific backup based on the id passed
         """
+        backup = get_backup(backup_id)
+        execute_command(f"rm -rf {backup['path']}")
         backups = read_backups()
-        for backup in backups:
-            if backup["id"] == backup_id:
-                execute_command(f"rm -rf {backup['path']}")
-                backups.remove(backup)
+        backups.remove(backup)
 
         write_backups(backups)
 
