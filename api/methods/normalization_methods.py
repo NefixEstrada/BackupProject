@@ -14,8 +14,7 @@ def normalize_string(string):
 
     # Remove consecutive _'s
     new_string = []
-    for number in range(len(string)):
-        current_character = string[number]
+    for number, current_character in enumerate(string):
         if not(number != 0 and current_character == string[number - 1] and current_character == "_"):
             new_string.append(current_character)
     new_string = "".join(new_string)
@@ -30,7 +29,10 @@ def normalize_string(string):
 
 
 # Normalize parser
-def normalize_parser(parser_args, ignore=[]):
+def normalize_parser(parser_args, ignore=None):
+    if ignore is None:
+        ignore = []
+
     normalized_parser = {}
     for arg_name, arg_value in parser_args.items():
         if arg_value != "" or arg_name not in ignore:
@@ -52,7 +54,7 @@ def beautify_string(string):
 # Make tree from a JSON string
 def make_tree(content):
     def get_children(parent_content, item, splitted_path):
-        if len(splitted_path) == 0:
+        if not splitted_path:
             parent_content.update(item)
             return
         child_name = splitted_path.pop(0)
